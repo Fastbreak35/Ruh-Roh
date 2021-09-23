@@ -1,0 +1,175 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>A Basic HTML5 Template</title>
+  <meta name="description" content="A simple HTML5 Template for new projects.">
+  <meta name="author" content="SitePoint">
+
+  <meta property="og:title" content="A Basic HTML5 Template">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
+  <meta property="og:description" content="A simple HTML5 Template for new projects.">
+  <meta property="og:image" content="image.png">
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+    <div class="box">
+        <div class="eye"></div>
+        <div class="eye"></div>
+    </div>
+    <h1>Ruh Roh</h1>
+    <p><strong>The #1 way to vacation with your favorite companion!</strong></p>
+<div class="wrapper">
+    <div class="search-input">
+    <input type="text" placeholder="Type to search.." required>
+    <div class="autocom-box">
+        <li>Login form in HTMl & CSS</li>
+        <li>How to learn HTML & CSS</li>
+        <li>How to learn Javascript</li>
+        <li>How to become Freelancer</li>
+        <li>How to become Web Developer</li>
+    </div>
+    <div class="icon"><i class="fas fa-search"></i></div>
+    </div>
+</div>
+   
+  <script src="js/suggestions.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
+
+
+
+*{
+    
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'poppins, sans-script';
+}
+body{
+    background-color:mediumslateblue;
+    padding: 0 20px;
+}
+
+
+h1{
+    margin: 0;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 7%;
+    font-size: 100px;
+
+}
+p{
+    text-align: center;
+
+}
+.wrapper{
+    max-width: 450px;
+    margin: 150px auto;
+}
+.wrapper .search-input{
+background: #fff;
+width: 100%;
+border-radius: 5px;
+box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12)
+}
+.search-input input{
+    height: 55px;
+    width: 100%;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    padding: 0 60px 0 20px;
+    font-size: 18px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.12);
+}
+.search-input .autocom-box{
+    padding: 0px;
+    max-height: 280px;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+}
+.search-input.active .autocom-box{
+padding: 10px 8px;
+opacity: 1;
+pointer-events: auto;
+}
+
+.autocom-box li{
+    list-style: none;
+    padding: 8px 12px;
+    width: 100%;
+    cursor: default;
+    border-radius: 3px;
+    display: none;
+}
+.search-input.active .autocom-box li{
+    display: block;
+}
+.autocom-box li:hover{
+    background: #efefef;
+}
+
+
+
+///getting all required documents
+const searchWrapper = document.querySelector(".search-input");
+const inputBox = searchWrapper.querySelector("input");
+const suggBox = searchWrapper.querySelector(".autocom-box");
+
+///if user press any key and release
+inputBox.onkeyup = (e) =>{
+   let userData = e.target.value; ///user entered data
+   let emptyArray = [];
+   if(userData){
+       emptyArray = suggestions.filter((data)=>{
+           ///filtering array value and user char to lowercase and return only those
+           ///word/ sent which are starts with user entered word
+           return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+       });
+       emptyArray = emptyArray.map((data)=>{
+           return data = '<li>' + data + '</li>';
+       });
+       console.log(emptyArray);
+       searchWrapper.classList.add("active"); //show autocomplete box
+       showSuggestions(emptyArray);
+       let allList = suggBox.querySelectorAll("li")
+       for (let index = 0; index < allList.length; i++){
+           //adding onclick attribute in all li tag
+           allList[i].setAttribute("onclick", "select(this");
+       }
+   }else{
+    searchWrapper.classList.remove("active"); //hide autocomplete box
+   }
+
+}
+function select(element){
+    let selectUserData = element.textContext;
+    inputBox.value = selectUserData; //passing the user selected list item data textfield
+    searchWrapper.classList.remove("active"); //hide autocomplete box
+}
+
+function showSuggestions(list){
+    let listData;
+    if (!list.legth){
+        userValue = inputBox.value;
+        listData = '<li>' + userValue + '</li>';
+    }else{
+        listData = list.join('');
+    }
+    suggBox.innerHTML = listData;
+}
